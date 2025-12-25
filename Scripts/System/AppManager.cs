@@ -4,6 +4,7 @@ using UnityEngine;
 using Moyo.Unity;
 using UnityEngine.SceneManagement;
 using Sirenix.OdinInspector;
+using static BuildingConfirmPanel;
 
 
 public enum AppLanguage
@@ -87,25 +88,28 @@ public class AppManager : MonoSingleton<AppManager>
 public enum AppState
 {
 
+    游戏加载完成,
 
     开始游戏,
 
     游戏进行中,
 
     结束游戏
+
+
 }
 public struct AppStateEvent
 {
-    public static AppStateEvent args;
+    public static AppStateEvent t;
 
-
+    public AppState State;
     
-    public static void Tiggle()
+    public static void Tiggle(AppState e)
     {
 
+        t.State = e;
 
 
-
-        MoyoEventManager.TriggerEvent<AppStateEvent>(args);
+        MoyoEventManager.TriggerEvent<AppStateEvent>(t);
     }
 }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System;
 
 
-public class ResourceRouting : MonoSingleton<ResourceRouting>,IMoyoEventListener<LOAppEvent>
+public class ResourceRouting : MonoSingleton<ResourceRouting>,IMoyoEventListener<AppStateEvent>
 {
 
 
@@ -36,11 +36,11 @@ public class ResourceRouting : MonoSingleton<ResourceRouting>,IMoyoEventListener
         this?.MoyoEventStopListening();
     }
 
-    public void OnMoyoEvent(LOAppEvent eventType)
+    public void OnMoyoEvent(AppStateEvent eventType)
     {
-        switch (eventType.eventType)
+        switch (eventType.State)
         {
-            case LOAppEventType.开始游戏:
+            case AppState.开始游戏:
 
                 GameResourcePreloading();
 
@@ -90,7 +90,7 @@ public class ResourceRouting : MonoSingleton<ResourceRouting>,IMoyoEventListener
         return list;
     }
 
-    public BuildingArchetype GetDefinition(string id)
+    public BuildingArchetype GetArchetype(string id)
     {
         BuildDefinitionsIfNeeded();
 

@@ -41,7 +41,7 @@ public class TheGame : MonoSingleton<TheGame>
      
 
 
-        LOAppEvent.Tigger(LOAppEventType.开始游戏);
+        AppStateEvent.Tiggle(AppState.开始游戏);
         Debug.Log("游戏开始");
 
     }

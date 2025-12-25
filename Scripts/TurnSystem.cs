@@ -143,6 +143,11 @@ public class TurnSystem : MonoSingleton<TurnSystem>
     {
         return new TurnSystemSaveData { currentNumberOfRounds = NumberOfRounds };
     }
+
+    internal void Load(TurnSystemSaveData turnSystemSaveData)
+    {
+        NumberOfRounds = turnSystemSaveData.currentNumberOfRounds;
+    }
 }
 
 /// <summary>

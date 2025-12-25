@@ -110,6 +110,16 @@ public class BuildingInstance : MonoBehaviour
 
     public static IReadOnlyCollection<BuildingInstance> ActiveInstances => _activeInstances;
 
+    public static void ClearAll()
+    {
+        List<BuildingInstance> r = new List<BuildingInstance>(_activeInstances);
+        _activeInstances.Clear();
+        foreach (var instance in r)
+        {
+            instance.Remove();
+        }
+    }
+
     private static Dictionary<CubeCoor, BuildingInstance> Static_OccupyMap = new Dictionary<CubeCoor, BuildingInstance>();
     // 优化后的 TryGetBuildingAtCell，复杂度从 O(N) 降为 O(1)
     public static bool TryGetBuildingAtCell(CubeCoor cell, out BuildingInstance inst)
@@ -824,7 +834,11 @@ public class BuildingInstance : MonoBehaviour
     {
         Destroy(gameObject);
     }
-
+    public void Remove()
+    {
+        Destroy(gameObject);
+    
+    }
 
 
 

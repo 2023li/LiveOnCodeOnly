@@ -57,7 +57,7 @@ public class Test : MonoBehaviour
     public void SaveTest(string key="test")
     {
       
-        PersistentManager.Instance.SaveGame(GameSaveData.CreateNew(key));
+      //  PersistentManager.Instance.SaveGame(GameSaveData.CreateNew(key));
 
     }
 

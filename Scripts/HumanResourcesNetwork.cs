@@ -71,6 +71,11 @@ public class HumanResourcesNetwork
         //暂时没什么需要存
         return new HumanResourcesNetworkSaveData();
     }
+
+    internal void Load(HumanResourcesNetworkSaveData humanResourcesNetworkSaveData)
+    {
+        Debug.LogWarning("暂时不需要回复什么");
+    }
 }
 
 [Serializable]

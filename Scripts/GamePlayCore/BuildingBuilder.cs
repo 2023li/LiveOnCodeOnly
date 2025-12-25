@@ -321,7 +321,7 @@ public class BuildingBuilder : MonoSingleton<BuildingBuilder>, IBackHandler, IMo
         }
 
         // 5. 实例化并定位
-        var go = Instantiate(buildingDef.BuildingPrefab);
+        BuildingInstance go = Instantiate(buildingDef.BuildingPrefab);
         instance = go;
         go.transform.SetPositionAndRotation(anchorPos, Quaternion.identity);
 
@@ -330,6 +330,62 @@ public class BuildingBuilder : MonoSingleton<BuildingBuilder>, IBackHandler, IMo
 
         return true;
     }
+    public bool TryCreateBuildingByData(BuildingInstance.BuildingSaveData data,out BuildingInstance ins)
+    {
+        BuildingArchetype archetype = ResourceRouting.Instance.GetArchetype(data.archetypeID);
+        return TryCreateBuildingAtCubeCoor(data.currentCenterInGrid, archetype,out ins,data);
+
+    }
+    public bool TryCreateBuildingAtCubeCoor(CubeCoor center, BuildingArchetype def, out BuildingInstance instance,BuildingInstance.BuildingSaveData data = null)
+    {
+        instance = null;
+
+        if (def == null)
+        {
+            Debug.LogWarning($"TryCreateBuilding: 配置为空");
+            return false;
+        }
+        if (def.BuildingPrefab == null)
+        {
+            Debug.LogWarning($"TryCreateBuilding: 预制体为空 - {def.name}");
+            return false;
+        }
+
+        // 1. 计算占地 (Radius)
+        int radius = Mathf.Max(0, def.Size - 1);
+        List<CubeCoor> cells = CoordinateCalculator.CellsInRadius(center, radius);
+
+
+        foreach (var c in cells)
+        {
+            if (!GridSystem.Instance.IsAllowPlacementBuilding(c))
+            {
+                // 这里可以输出更详细的 Log，比如是哪个格子被占用了
+                return false;
+            }
+        }
+
+
+        // 3. 标记 GridSystem 占用
+        foreach (CubeCoor c in cells)
+        {
+            GridSystem.Instance.SetOccupy(c);
+        }
+
+        // 4. 实例化对象
+        Vector3 anchorPos = GridSystem.Instance.CubeToWorld(center);
+        instance = Instantiate(def.BuildingPrefab);
+
+        // 5. 设置物理位置
+        instance.transform.SetPositionAndRotation(anchorPos, Quaternion.identity);
+
+        // 6. 初始化建筑逻辑数据
+        instance.Initialize(def, cells.ToArray(), center,data);
+
+        return true;
+    }
+
+
 
     #endregion
 
