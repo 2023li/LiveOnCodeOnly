@@ -129,13 +129,7 @@ public class BuildingInstance : MonoBehaviour
 
     #endregion
 
-
-
-
-
-
-
-
+    //-----------------------------------------------------------
 
     #region 基础 & 状态字段 + 属性
 
@@ -238,18 +232,16 @@ public class BuildingInstance : MonoBehaviour
 
         }
     }
-    [ShowInInspector, ReadOnly, LabelText("当前工人")]
+   
     private int _selfCurrentWorkers;
+    [ShowInInspector, ReadOnly, LabelText("当前工人")]
     public int Self_CurrentWorkers
     {
 
         set
         {
-            if (value <= Ctx.HumanResourcesNetwork.Unemployed)
-            {
-                _selfCurrentWorkers = value;
-                OnStateChanged?.Invoke(this, BuildingStateValueType.CurrentWorkers);
-            }
+            _selfCurrentWorkers = value;
+            OnStateChanged?.Invoke(this, BuildingStateValueType.CurrentWorkers);
         }
 
         get => _selfCurrentWorkers;
@@ -463,9 +455,9 @@ public class BuildingInstance : MonoBehaviour
     private Dictionary<string, string> specificData_string;
     // --- Set 方法 (编译时静态绑定，无装箱) ---
     public void SetData(string key, int value) { if (specificData_int == null) specificData_int = new Dictionary<string, int>(); specificData_int[key] = value; }
-    public void SetData(string key, float value) { if (specificData_float == null) specificData_float = new Dictionary<string, float>();  specificData_float[key] = value; }
+    public void SetData(string key, float value) { if (specificData_float == null) specificData_float = new Dictionary<string, float>(); specificData_float[key] = value; }
     public void SetData(string key, Vector3 value) { if (specificData_v3 == null) specificData_v3 = new Dictionary<string, Vector3>(); specificData_v3[key] = value; }
-    public void SetData(string key, string value){ if (specificData_string == null) specificData_string = new Dictionary<string, string>(); specificData_string[key] = value; }
+    public void SetData(string key, string value) { if (specificData_string == null) specificData_string = new Dictionary<string, string>(); specificData_string[key] = value; }
 
     // --- Get 方法 ---
     public int GetInt(string key) => specificData_int.TryGetValue(key, out var v) ? v : 0;
@@ -475,9 +467,6 @@ public class BuildingInstance : MonoBehaviour
 
 
     #endregion
-
-
-
 
     #region Rule相关
 
@@ -533,7 +522,7 @@ public class BuildingInstance : MonoBehaviour
         foreach (var rule in CurrentRules)
         {
             rule.OnUpdate(this, phase);
-            if (phase==TurnPhase.回合结束阶段 && rule.Lifecycle==RuleLifecycle.TimeBased)
+            if (phase == TurnPhase.回合结束阶段 && rule.Lifecycle == RuleLifecycle.TimeBased)
             {
                 rule.RemainingRounds--;
                 if (rule.RemainingRounds <= 0)
@@ -543,7 +532,7 @@ public class BuildingInstance : MonoBehaviour
             }
         }
 
-       
+
     }
     // [新增] 加载基础规则
     private void LoadBaseRules()
@@ -580,11 +569,11 @@ public class BuildingInstance : MonoBehaviour
                 Debug.LogWarning($"[BuildingInstance] 等级规则为空或克隆失败（index={i}）", this);
                 continue;
             }
-          
+
             AddRule(cloned);
         }
     }
-   
+
     #endregion
 
 
@@ -616,7 +605,7 @@ public class BuildingInstance : MonoBehaviour
         Def = def;
         if (Def?.LevelsList == null || Def.LevelsList.Count == 0)
         {
-            Debug.LogError("[BuildingInstance] 建筑定义缺少等级数据", this);
+            Debug.LogError($"{def.Id} 建筑定义缺少等级数据", this);
             return;
         }
 
@@ -633,7 +622,7 @@ public class BuildingInstance : MonoBehaviour
         }
         else
         {
-           
+
 
             InstanceId = data.instanceId;
             Self_LevelIndex = data.level;
@@ -671,19 +660,19 @@ public class BuildingInstance : MonoBehaviour
 
         //特殊数据
         public Dictionary<string, string> stringData;
-        public Dictionary<string , int> intData;
+        public Dictionary<string, int> intData;
         public Dictionary<string, Vector3> v3Data;
-        public Dictionary<string,float> floatData;
+        public Dictionary<string, float> floatData;
 
         public static BuildingSaveData GetData(BuildingInstance instance)
         {
-           return instance.Save();
+            return instance.Save();
         }
 
 
     }
 
- 
+
     public BuildingSaveData Save()
     {
         BuildingSaveData data = new BuildingSaveData();
@@ -699,7 +688,7 @@ public class BuildingInstance : MonoBehaviour
         data.intData = specificData_int;
         data.floatData = specificData_float;
         data.v3Data = specificData_v3;
-        data.stringData = specificData_string;    
+        data.stringData = specificData_string;
         return data;
     }
 
@@ -765,8 +754,8 @@ public class BuildingInstance : MonoBehaviour
 
 
 
-  
-    
+
+
 
     public bool TryUpgrade()
     {
@@ -824,7 +813,7 @@ public class BuildingInstance : MonoBehaviour
         return true;
     }
 
-  
+
 
 
 
@@ -837,7 +826,7 @@ public class BuildingInstance : MonoBehaviour
     public void Remove()
     {
         Destroy(gameObject);
-    
+
     }
 
 
@@ -847,7 +836,7 @@ public class BuildingInstance : MonoBehaviour
     #region 视觉效果
 
 
-    public BuildingView View {  get; private set; } 
+    public BuildingView View { get; private set; }
 
 
 
@@ -864,14 +853,14 @@ public class BuildingInstance : MonoBehaviour
 
 public static class BuildingInstanceExtensions
 {
-    public static bool BE_TryAddResource(this BuildingInstance self,SupplyAmount item)
+    public static bool BE_TryAddResource(this BuildingInstance self, SupplyAmount item)
     {
 
-        return BE_TryAddResource(self,item.Resource,item.Amount);
-       
+        return BE_TryAddResource(self, item.Resource, item.Amount);
+
     }
 
-    public static bool BE_TryAddResource(this BuildingInstance self, SupplyDef def,int num)
+    public static bool BE_TryAddResource(this BuildingInstance self, SupplyDef def, int num)
     {
         if (!self.Ctx.ResourceNetwork.TryAddResource(def, num, out string r))
         {

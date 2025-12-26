@@ -24,6 +24,7 @@ public abstract class Rule:ICloneable
     public abstract string GetRuleName();
 
     public RuleLifecycle Lifecycle = RuleLifecycle.Persistent;
+    [ShowIf(nameof(Lifecycle), RuleLifecycle.TimeBased)] 
     public int RemainingRounds = -1;
     
 

@@ -92,10 +92,10 @@ namespace Moyo.Unity
 		}
 
 		/// <summary>
-		/// Adds a new subscriber to a certain event.
+		/// Adds a new subscriber to a certain eventArg.
 		/// </summary>
 		/// <param name="listener">listener.</param>
-		/// <typeparam name="MoyoEvent">The event name.</typeparam>
+		/// <typeparam name="MoyoEvent">The eventArg name.</typeparam>
 		public static void AddListener<MoyoEvent>( IMoyoEventListener<MoyoEvent> listener ) where MoyoEvent : struct
 		{
 			Type eventType = typeof( MoyoEvent );
@@ -112,10 +112,10 @@ namespace Moyo.Unity
 		}
 
 		/// <summary>
-		/// Removes a subscriber from a certain event.
+		/// Removes a subscriber from a certain eventArg.
 		/// </summary>
 		/// <param name="listener">listener.</param>
-		/// <typeparam name="MoyoEvent">The event name.</typeparam>
+		/// <typeparam name="MoyoEvent">The eventArg name.</typeparam>
 		public static void RemoveListener<MoyoEvent>( IMoyoEventListener<MoyoEvent> listener ) where MoyoEvent : struct
 		{
 			Type eventType = typeof( MoyoEvent );
@@ -162,9 +162,9 @@ namespace Moyo.Unity
 		}
 
 		/// <summary>
-		/// Triggers an event. All instances that are subscribed to it will receive it (and will potentially act on it).
+		/// Triggers an eventArg. All instances that are subscribed to it will receive it (and will potentially act on it).
 		/// </summary>
-		/// <param name="newEvent">The event to trigger.</param>
+		/// <param name="newEvent">The eventArg to trigger.</param>
 		/// <typeparam name="MoyoEvent">The 1st name parameter.</typeparam>
 		public static void TriggerEvent<MoyoEvent>( MoyoEvent newEvent ) where MoyoEvent : struct
 		{
@@ -235,7 +235,7 @@ namespace Moyo.Unity
 	public interface MoyoEventListenerBase { };
 
 	/// <summary>
-	/// A public interface you'll need to implement for each name of event you want to listen to.
+	/// A public interface you'll need to implement for each name of eventArg you want to listen to.
 	/// </summary>
 	public interface IMoyoEventListener<T> : MoyoEventListenerBase
 	{

@@ -17,7 +17,7 @@ public static class SupplyEnumGenerator   // ← 不再继承 AssetPostprocessor
     public static void GenerateEnum()
     {
         // 找到所有 SupplyDef
-        var guids = AssetDatabase.FindAssets("t:SupplyDef", new[] { SuppliesFolder });
+        var guids = AssetDatabase.FindAssets("eventArg:SupplyDef", new[] { SuppliesFolder });
 
         var names = guids
             .Select(g => AssetDatabase.GUIDToAssetPath(g))

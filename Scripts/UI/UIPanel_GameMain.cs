@@ -220,10 +220,6 @@ public class UIPanel_GameMain : PanelBase
 
     private void OnEnable_建筑信息()
     {
-
-        Debug.Log(TheGame.Instance==null);
-        Debug.Log(TheGame.Instance.BuildingSelector ==null);
-
         TheGame.Instance.BuildingSelector.Event_SelectedBuilding += ShowBuildingBrief;
     }
     private void OnDisable_建筑信息()

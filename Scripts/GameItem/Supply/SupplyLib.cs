@@ -148,11 +148,11 @@ public class SupplyLib : ScriptableObject
 
         if (globalScan)
         {
-            guids = AssetDatabase.FindAssets("t:SupplyDef");
+            guids = AssetDatabase.FindAssets("eventArg:SupplyDef");
         }
         else
         {
-            guids = AssetDatabase.FindAssets("t:SupplyDef", new[] { DefaultSuppliesFolder });
+            guids = AssetDatabase.FindAssets("eventArg:SupplyDef", new[] { DefaultSuppliesFolder });
         }
 
         try
@@ -202,7 +202,7 @@ public class SupplyLib : ScriptableObject
     {
         if (Ins != null) return;
 
-        var guidsLib = AssetDatabase.FindAssets("t:SupplyLib");
+        var guidsLib = AssetDatabase.FindAssets("eventArg:SupplyLib");
         if (guidsLib != null && guidsLib.Length > 0)
         {
             string libPath = AssetDatabase.GUIDToAssetPath(guidsLib[0]);

@@ -72,7 +72,7 @@ public class BuildingArchetype : ScriptableObject
     [Tooltip("留空则始终允许建造")]
     public List<Condition> AllowConstruction;
 
-    [LabelText("建筑的自带Buff")]
+    [LabelText("建筑的固有Rule")]
     [SerializeReference]
     public List<Rule> BaseRules;
 

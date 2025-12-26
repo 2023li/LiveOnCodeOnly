@@ -8,7 +8,7 @@ using Moyo.Unity;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
 
-public class InputManager : MonoSingleton<InputManager>
+public class InputManager : MonoSingleton<InputManager>,IMoyoEventListener<AppStateEvent>
 {
     public Camera RealCamera { get; private set; }
     public Vector3 MousePos { get; private set; }
@@ -156,7 +156,12 @@ public class InputManager : MonoSingleton<InputManager>
     }
     public bool IsGamePlayMap() => inputActionMap.GamePlay.enabled;
 
-     private void LateUpdate()
+    private void OnEnable()
+    {
+        this.MoyoEventStartListening<AppStateEvent>();    
+    }
+    
+    private void LateUpdate()
     {
         if (!_pendingMousePrimaryClick)
         {
@@ -181,12 +186,38 @@ public class InputManager : MonoSingleton<InputManager>
         _pendingMousePrimaryClick = false;
     }
 
+    private void OnDisable()
+    {
+        this.MoyoEventStopListening<AppStateEvent>();
+    }
 
     protected override void OnDestroy()
     {
         base.OnDestroy();
     }
+    public void OnMoyoEvent(AppStateEvent eventType)
+    {
+        switch (eventType.State)
+        {
+            case AppState.游戏加载完成:
+                break;
+            case AppState.游戏场景加载完成:
 
+               
+                    RealCamera = Camera.main;
+                
+
+                break;
+            case AppState.开始游戏:
+                break;
+            case AppState.游戏进行中:
+                break;
+            case AppState.结束游戏:
+                break;
+            default:
+                break;
+        }
+    }
 
 
 
@@ -218,7 +249,5 @@ public class InputManager : MonoSingleton<InputManager>
         _mouseWheelHandlers.Remove(handler);
     }
 
-
-    
-
+   
 }

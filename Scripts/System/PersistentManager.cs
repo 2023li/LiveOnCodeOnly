@@ -11,7 +11,7 @@ using Sirenix.OdinInspector;
 // 确保引用你的命名空间
 using static TechTreeManager;
 
-public class PersistentManager : Singleton<PersistentManager>
+public class PersistentManager : MonoSingleton<PersistentManager>
 {
     protected PersistentManager() { }
 
@@ -62,7 +62,11 @@ public class PersistentManager : Singleton<PersistentManager>
     // CollectCurrentGameSaveData 方法保持你修复后的样子，这里略去不写
     private GameSaveData CollectCurrentGameSaveData()
     {
-        if (currentGameData == null) { currentGameData = GameSaveData.CreateNew(); }
+        if (currentGameData == null)
+        {
+            Debug.Log("自动创建存档");
+            currentGameData = GameSaveData.CreateNew();
+        }
 
         //收集建筑数据
         List<BuildingInstance.BuildingSaveData> buildingSaveDatas = new();
@@ -83,6 +87,7 @@ public class PersistentManager : Singleton<PersistentManager>
 
         return currentGameData;
     }
+    [Button]
     public void SaveGame()
     {
         // 假设你已经修复了 CollectCurrentGameSaveData 中的赋值问题
@@ -133,6 +138,7 @@ public class PersistentManager : Singleton<PersistentManager>
     }
 
     #region 加载
+    [Button]
     public void LoadGame(string saveid)
     {
         // 1. 读取存档文件到内存 (currentGameData)
@@ -147,24 +153,27 @@ public class PersistentManager : Singleton<PersistentManager>
 
         // 2. 切换到游戏场景 (假设场景名为 "GameMain" 或你定义的常量)
         // 注意：这里借用 AppManager 来开启协程，因为 PersistentManager 可能不是 MonoBehaviour
-        AppManager.Instance.LoadScene("GameMain", true); // true 表示使用过渡页
+        AppManager.Instance.LoadGameScene(); // true 表示使用过渡页
 
         // 3. 开启协程等待场景加载完成，然后恢复数据
-        AppManager.Instance.StartCoroutine(RestoreGameRoutine());
+        StartCoroutine(RestoreGameRoutine());
     }
     /// <summary>
     /// 等待场景加载并恢复数据的协程
     /// </summary>
     private IEnumerator RestoreGameRoutine()
     {
+        Debug.Log("RestoreGameRoutine...1");
         // 等待直到当前场景变为游戏场景
         // 注意：如果你使用了过渡场景，这里需要确保逻辑是正确的。
         // AppManager.LoadScene 通常是异步的，我们需要等待目标场景激活。
-        yield return new WaitUntil(() => UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "GameMain");
+        yield return new WaitUntil(() => UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == LOConstant.SceneName.Game);
 
+        Debug.Log("RestoreGameRoutine...2");
         // 等待一帧，确保场景内所有 Monobehaviour 的 Awake/Start 已执行
         yield return null;
 
+        Debug.Log("RestoreGameRoutine...3");
         // 4. 执行数据恢复
         RestoreGameState();
     }
@@ -173,6 +182,8 @@ public class PersistentManager : Singleton<PersistentManager>
     /// </summary>
     private void RestoreGameState()
     {
+        Debug.Log("RestoreGameState...1");
+
         if (currentGameData == null)
         {
             Debug.LogError("[PersistentManager] 数据恢复失败：currentGameData 为空");
@@ -204,9 +215,7 @@ public class PersistentManager : Singleton<PersistentManager>
     /// </summary>
     private void ReconstructBuildings()
     {
-        // 1. 清理当前场景可能残留的建筑 (如果是重新开始或覆盖加载)
-        //BuildingManager.Instance.ClearAll(); // 如果你有这个方法的话
-
+       
         BuildingInstance.ClearAll();
 
         if (currentGameData.allBuildingData == null) return;

@@ -53,7 +53,6 @@ public class GameContext : Singleton<GameContext>, IGameContext
             techTree = new TechTreeManager(); 
         }
        
-
         if (environment == null)
         {
             environment = new CityEnvironment();

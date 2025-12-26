@@ -340,6 +340,8 @@ public class BuildingBuilder : MonoSingleton<BuildingBuilder>, IBackHandler, IMo
     {
         instance = null;
 
+        Debug.Log("TryCreateBuildingAtCubeCoor");
+
         if (def == null)
         {
             Debug.LogWarning($"TryCreateBuilding: 配置为空");

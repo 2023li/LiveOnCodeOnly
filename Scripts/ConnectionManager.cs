@@ -27,7 +27,7 @@ public class ConnectionManager : MonoSingleton<ConnectionManager>
 {
     #region 画线
 
-    // 1. Define the event (Passing the start node allows listeners to know WHERE it started)
+    // 1. Define the eventArg (Passing the start node allows listeners to know WHERE it started)
     public event Action<UINode> OnLineDragStart;
 
     // Optional: Useful to know when it ends to stop effects
@@ -378,7 +378,7 @@ public class ConnectionManager : MonoSingleton<ConnectionManager>
             }
         }
 
-        // 3. Trigger the end event before clearing _activeLine
+        // 3. Trigger the end eventArg before clearing _activeLine
         if (_activeLine != null)
         {
             OnLineDragEnd?.Invoke(origin);
